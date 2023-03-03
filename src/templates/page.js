@@ -4,6 +4,7 @@ import Helmet from 'react-helmet'
 
 import { Layout } from '../components/Layout'
 import { SEO } from '../components/SEO'
+import { AboutSidebar } from '../components/AboutSidebar'
 import config from '../utils/config'
 
 export default function PageTemplate({ data }) {
@@ -11,28 +12,27 @@ export default function PageTemplate({ data }) {
   const { title, description, slug } = post.frontmatter
 
   return (
-    <>
-      <Helmet
-        title={`${title === 'Tania Rascia' ? 'Resume' : title} | ${
-          config.siteTitle
-        }`}
-      />
-      <SEO />
-
-      <article id={slug}>
-        <header>
-          <div className="container">
-            <h1>{title}</h1>
-            <p className="description">{description}</p>
+    <div>
+      <Helmet title={`${title} | ${config.siteTitle}`} />
+      <SEO customDescription={description} />
+      <div className="container">
+        <div className="grid">
+          <div className="article-content">
+            <div className="hero">
+              <h1>{title}</h1>
+            </div>
+            <section className="segment small">
+              <div
+                className="post-content"
+                dangerouslySetInnerHTML={{ __html: post.html }}
+              />
+            </section>
           </div>
-        </header>
 
-        <section
-          className="container"
-          dangerouslySetInnerHTML={{ __html: post.html }}
-        />
-      </article>
-    </>
+          {slug.includes('me') && <AboutSidebar />}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -44,7 +44,6 @@ export const pageQuery = graphql`
       html
       frontmatter {
         title
-        description
         slug
       }
     }

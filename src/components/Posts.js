@@ -9,6 +9,7 @@ export const Posts = ({
   prefix,
   hideDate,
   yearOnly,
+  ...props
 }) => {
   const postsByYear = useMemo(() => {
     const collection = {}
@@ -25,8 +26,8 @@ export const Posts = ({
 
   if (showYears) {
     return years.map((year) => (
-      <section key={year}>
-        <h2>{year}</h2>
+      <section key={year} className="segment">
+        <h2 className="year">{year}</h2>
         <div className="posts">
           {postsByYear[year].map((node) => (
             <Post key={node.id} node={node} query={query} prefix={prefix} />
@@ -36,7 +37,7 @@ export const Posts = ({
     ))
   } else {
     return (
-      <div className="posts">
+      <div className={props.newspaper ? 'posts newspaper' : 'posts'}>
         {data.map((node) => (
           <Post
             key={node.id}
@@ -45,6 +46,7 @@ export const Posts = ({
             prefix={prefix}
             hideDate={hideDate}
             yearOnly={yearOnly}
+            {...props}
           />
         ))}
       </div>
